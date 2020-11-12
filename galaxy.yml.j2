@@ -1,0 +1,21 @@
+namespace: sivel
+name: acd
+version: {{ version }}
+readme: README.md
+authors:
+- Ansible Team <info@ansible.com>
+description: The sivel.acd collection is used to install all of the
+             collections which were in the Ansible-2.9 release
+license:
+- GPL-3.0-or-later
+license_file: ''
+tags:
+  - acd
+  - ansible
+  - kitchensink
+repository: http://github.com/ansible/ansible-community
+documentation: http://docs.ansible.com/ansible
+homepage: http://docs.ansible.com/ansible
+issues: http://github.com/ansible/ansible-community
+dependencies:
+  {{ dependencies|to_nice_yaml(indent=2)|indent(width=2)|trim }}
