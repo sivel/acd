@@ -6,6 +6,7 @@ import json
 import os
 import string
 import subprocess
+from distutils.version import LooseVersion
 from urllib.request import urlopen
 
 from jinja2 import Environment
@@ -49,6 +50,13 @@ for file in files:
         continue
     deps.pop('_ansible_base_version', None)
     deps.pop('_ansible_core_version', None)
+
+    v = LooseVersion(version)
+    if len(v.version) > 3:
+        version = '{0}-{1}'.format(
+            '.'.join(map(str, v.version[:3])),
+            ''.join(map(str, v.version[3:]))
+        )
 
     t = e.from_string(template)
     with open(os.path.join(ROOT, 'galaxy.yml'), 'w+') as f:
