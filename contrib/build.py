@@ -34,15 +34,21 @@ with open(os.path.join(ROOT, 'galaxy.yml.j2')) as f:
 
 url = (
     'https://api.github.com/repos/ansible-community/ansible-build-data'
-    '/contents/2.10/'
+    '/contents/'
 )
 
-files = json.load(urlopen(url))
 
-for file in files:
-    if os.path.splitext(file['name'])[1] != '.deps':
-        continue
+def get_deps_files(url):
+    for obj in json.load(urlopen(url)):
+        if obj['type'] == 'dir':
+            yield from get_deps_files(obj['url'])
+        elif os.path.splitext(obj['name'])[1] == '.deps':
+            yield obj
+        else:
+            continue
 
+
+for file in get_deps_files(url):
     try:
         deps = yaml.safe_load(urlopen(file['download_url']))
         version = deps.pop('_ansible_version')
